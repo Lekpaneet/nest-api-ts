@@ -1,0 +1,28 @@
+name: nestjs app
+
+on:
+  push:
+    branches: [main]
+  pull_requests:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+  strategy:
+    matrix:
+      node-version: [16.x, 18.x, 19.x]
+
+    steps:
+      - uses: action/checkout@v3
+      - name: Use and run node-version ${{ matrix.node-version }}
+        uses: action/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install packet app
+      - run: npm ci
+      - name: run and build package
+      - run: npm run build --if-present
+      - name: test app
+      - run: npm test
