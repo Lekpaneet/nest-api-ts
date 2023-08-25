@@ -14,6 +14,11 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('event')
+  getEvents() {
+    return this.appService.getEvents();
+  }
+
   @Get('node-id/:propId')
   getNodeId(@Param('propId') propId: string, @Query() q: any) {
     return this.taskFunctionService.generateNoteId({
