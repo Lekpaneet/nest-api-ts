@@ -95,6 +95,48 @@ export class TaskFunctionsService {
     }
   }
 
+  getOpenSSL(q: string) {
+    const keyCert = "U2FsdGVkX1+gbrkoRfie6caeZ3NM/Xoux0uGQBOiiyY=";
+    const fileText = "NPA.TXT";
+    const fileEnc = "TEST-NPA.enc";
+    const pathEnc = "/Users/paneet/Documents/enc/";
+    const timeStamp = Date.now();
+
+    if (q == "de" && fs.existsSync(`${pathEnc}${fileEnc}`)) {
+      const openssl = spawn("openssl", [
+        "enc",
+        "-aes-256-cbc",
+        "-d",
+        "-a",
+        "-salt",
+        "-in",
+        `${pathEnc}${fileEnc}`,
+        "-pass",
+        `pass:${keyCert}`,
+        "-out",
+        `${pathEnc}${timeStamp}-${fileText}`,
+      ]);
+      return "decyption";
+    }
+
+    if (q == "en" && fs.existsSync(`${pathEnc}${fileText}`)) {
+      const openssl = spawn("openssl", [
+        "enc",
+        "-aes-256-cbc",
+        "-a",
+        "-salt",
+        "-in",
+        `${pathEnc}${fileText}`,
+        "-pass",
+        `pass:${keyCert}`,
+        "-out",
+        `${pathEnc}${fileEnc}`,
+      ]);
+      return "encypt";
+    }
+    return "openssl";
+  }
+
   encryptAes256Cbc(fileTextName: string = null) {
     const fileText = fileTextName || "NPA.TXT";
     const fileEnc = `${Date.now()}-ENCRYPTED.enc`;
@@ -188,47 +230,5 @@ export class TaskFunctionsService {
       throw new Error(error);
     }
     //}
-  }
-
-  getOpenSSL(q: string) {
-    const keyCert = "U2FsdGVkX1+gbrkoRfie6caeZ3NM/Xoux0uGQBOiiyY=";
-    const fileText = "NPA.TXT";
-    const fileEnc = "TEST-NPA.enc";
-    const pathEnc = "/Users/paneet/Documents/enc/";
-    const timeStamp = Date.now();
-
-    if (q == "de" && fs.existsSync(`${pathEnc}${fileEnc}`)) {
-      const openssl = spawn("openssl", [
-        "enc",
-        "-aes-256-cbc",
-        "-d",
-        "-a",
-        "-salt",
-        "-in",
-        `${pathEnc}${fileEnc}`,
-        "-pass",
-        `pass:${keyCert}`,
-        "-out",
-        `${pathEnc}${timeStamp}-${fileText}`,
-      ]);
-      return "decyption";
-    }
-
-    if (q == "en" && fs.existsSync(`${pathEnc}${fileText}`)) {
-      const openssl = spawn("openssl", [
-        "enc",
-        "-aes-256-cbc",
-        "-a",
-        "-salt",
-        "-in",
-        `${pathEnc}${fileText}`,
-        "-pass",
-        `pass:${keyCert}`,
-        "-out",
-        `${pathEnc}${fileEnc}`,
-      ]);
-      return "encypt";
-    }
-    return "openssl";
   }
 }
