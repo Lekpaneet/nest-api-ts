@@ -10,5 +10,5 @@ export class EventsListener {
         setTimeout(() => {
             console.log(`On Event ${(Date.now()-now)/1000}s - `, payload);
         }, timeJob);
-    }
+    } 
 }
